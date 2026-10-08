@@ -8,6 +8,120 @@ document.addEventListener('DOMContentLoaded', function () {
     const scrollNav = document.querySelector('[data-scroll-nav]');
     const reviewForm = document.querySelector('#review-form');
     const reviewStorageKey = 'clickSlickCustomerReviews';
+    const hero = document.querySelector('.hero');
+    const particleCanvas = hero?.querySelector('.hero-particles');
+
+    if (hero && particleCanvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const context = particleCanvas.getContext('2d');
+        if (context) {
+            const lowPower = window.matchMedia('(max-width: 767px)').matches
+                || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4)
+                || navigator.connection?.saveData;
+            const particleCount = lowPower ? 12 : 34;
+            const particles = [];
+            let frameId = 0;
+            let lastFrame = 0;
+            let isVisible = false;
+            let isPageVisible = !document.hidden;
+
+            function resizeCanvas() {
+                const bounds = hero.getBoundingClientRect();
+                const ratio = Math.min(window.devicePixelRatio || 1, lowPower ? 1 : 1.5);
+                particleCanvas.width = Math.round(bounds.width * ratio);
+                particleCanvas.height = Math.round(bounds.height * ratio);
+                particleCanvas.style.width = `${bounds.width}px`;
+                particleCanvas.style.height = `${bounds.height}px`;
+                context.setTransform(ratio, 0, 0, ratio, 0, 0);
+            }
+
+            function seedParticles() {
+                particles.length = 0;
+                for (let index = 0; index < particleCount; index += 1) {
+                    particles.push({
+                        x: Math.random() * hero.clientWidth,
+                        y: Math.random() * hero.clientHeight,
+                        radius: Math.random() * (lowPower ? 1.3 : 1.8) + 0.45,
+                        speed: Math.random() * 0.12 + 0.035,
+                        drift: (Math.random() - 0.5) * 0.12,
+                        alpha: Math.random() * 0.3 + 0.12
+                    });
+                }
+            }
+
+            function drawParticles(time) {
+                frameId = 0;
+                if (!isVisible || !isPageVisible) return;
+                if (time - lastFrame < 32) {
+                    frameId = window.requestAnimationFrame(drawParticles);
+                    return;
+                }
+                lastFrame = time;
+
+                const width = hero.clientWidth;
+                const height = hero.clientHeight;
+                context.clearRect(0, 0, width, height);
+
+                particles.forEach((particle) => {
+                    particle.y -= particle.speed;
+                    particle.x += particle.drift;
+                    if (particle.y < -4) {
+                        particle.y = height + 4;
+                        particle.x = Math.random() * width;
+                    }
+                    if (particle.x < -4) particle.x = width + 4;
+                    if (particle.x > width + 4) particle.x = -4;
+
+                    context.beginPath();
+                    context.fillStyle = `rgba(219, 234, 254, ${particle.alpha})`;
+                    context.ellipse(particle.x, particle.y, particle.radius * 0.72, particle.radius, -0.25, 0, Math.PI * 2);
+                    context.fill();
+
+                    context.beginPath();
+                    context.fillStyle = `rgba(255, 255, 255, ${particle.alpha * 0.65})`;
+                    context.arc(particle.x - particle.radius * 0.2, particle.y - particle.radius * 0.28, particle.radius * 0.25, 0, Math.PI * 2);
+                    context.fill();
+                });
+
+                frameId = window.requestAnimationFrame(drawParticles);
+            }
+
+            function updateAnimation() {
+                if (isVisible && isPageVisible && !frameId) {
+                    frameId = window.requestAnimationFrame(drawParticles);
+                } else if ((!isVisible || !isPageVisible) && frameId) {
+                    window.cancelAnimationFrame(frameId);
+                    frameId = 0;
+                }
+            }
+
+            resizeCanvas();
+            seedParticles();
+
+            const visibilityObserver = new IntersectionObserver((entries) => {
+                isVisible = entries[0].isIntersecting;
+                updateAnimation();
+            });
+            visibilityObserver.observe(hero);
+
+            const handleResize = () => {
+                resizeCanvas();
+                seedParticles();
+            };
+            const handleVisibility = () => {
+                isPageVisible = !document.hidden;
+                updateAnimation();
+            };
+
+            window.addEventListener('resize', handleResize, { passive: true });
+            document.addEventListener('visibilitychange', handleVisibility);
+            window.addEventListener('pagehide', () => {
+                visibilityObserver.disconnect();
+                window.removeEventListener('resize', handleResize);
+                document.removeEventListener('visibilitychange', handleVisibility);
+                if (frameId) window.cancelAnimationFrame(frameId);
+            }, { once: true });
+        }
+    }
 
     function escapeReviewText(value) {
         return String(value).replace(/[&<>'"]/g, character => ({
@@ -107,12 +221,22 @@ document.addEventListener('DOMContentLoaded', function () {
             const expanded = this.getAttribute('aria-expanded') === 'true';
             this.setAttribute('aria-expanded', String(!expanded));
             navCollapse.classList.toggle('show');
+            this.classList.toggle('is-open', !expanded);
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key !== 'Escape' || !navCollapse.classList.contains('show')) return;
+            navCollapse.classList.remove('show');
+            navToggle.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.focus();
         });
 
         document.addEventListener('click', function (event) {
             if (!navCollapse.classList.contains('show')) return;
             if (navCollapse.contains(event.target) || navToggle.contains(event.target)) return;
             navCollapse.classList.remove('show');
+            navToggle.classList.remove('is-open');
             navToggle.setAttribute('aria-expanded', 'false');
         });
     }
@@ -121,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function () {
             if (navCollapse && navCollapse.classList.contains('show')) {
                 navCollapse.classList.remove('show');
+                navToggle.classList.remove('is-open');
                 navToggle.setAttribute('aria-expanded', 'false');
             }
         });
@@ -171,64 +296,6 @@ document.addEventListener('DOMContentLoaded', function () {
         beforeAfterSlider.addEventListener('pointerleave', () => {
             dragging = false;
         });
-    }
-
-    const multiStepForm = document.querySelector('.multi-step-form');
-    if (multiStepForm) {
-        const steps = Array.from(multiStepForm.querySelectorAll('.form-step'));
-        const progress = Array.from(multiStepForm.querySelectorAll('.progress-indicator span'));
-        const prevBtn = multiStepForm.querySelector('[data-action="prev"]');
-        const nextBtn = multiStepForm.querySelector('[data-action="next"]');
-        const submitBtn = multiStepForm.querySelector('[data-action="submit"]');
-        const form = multiStepForm.querySelector('form');
-        let currentStep = 0;
-
-        function showStep(index) {
-            steps.forEach((step, i) => {
-                step.classList.toggle('active', i === index);
-            });
-
-            progress.forEach((bar, i) => {
-                bar.classList.toggle('active', i <= index);
-            });
-
-            prevBtn.style.visibility = index === 0 ? 'hidden' : 'visible';
-            nextBtn.style.display = index === steps.length - 1 ? 'none' : 'inline-flex';
-            submitBtn.style.display = index === steps.length - 1 ? 'inline-flex' : 'none';
-        }
-
-        prevBtn?.addEventListener('click', () => {
-            if (currentStep > 0) {
-                currentStep -= 1;
-                showStep(currentStep);
-            }
-        });
-
-        nextBtn?.addEventListener('click', () => {
-            const activeFields = steps[currentStep].querySelectorAll('[required]');
-            let valid = true;
-            activeFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.focus();
-                    valid = false;
-                }
-            });
-            if (!valid) return;
-            currentStep += 1;
-            showStep(currentStep);
-        });
-
-        showStep(currentStep);
-    }
-
-    const mobileServiceCheckbox = document.querySelector('#mobile-service');
-    const addressField = document.querySelector('#service-address-wrap');
-    if (mobileServiceCheckbox && addressField) {
-        const toggleAddress = () => {
-            addressField.style.display = mobileServiceCheckbox.checked ? 'block' : 'none';
-        };
-        mobileServiceCheckbox.addEventListener('change', toggleAddress);
-        toggleAddress();
     }
 
     const sectionLinks = document.querySelectorAll('a[href^="#"]');

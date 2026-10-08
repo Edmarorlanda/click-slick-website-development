@@ -7,17 +7,16 @@ $database = null;
 $databaseError = null;
 
 try {
-    $database = new PDO(
-        'mysql:host=127.0.0.1;dbname=click_slick;charset=utf8mb4',
-        'root',
-        '',
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-        ]
-    );
-
+$database = new PDO(
+    'mysql:host=sql300.infinityfree.com;dbname=if0_43109764_click_slick;charset=utf8mb4',
+    'if0_43109764',
+    'dnxgsIk3Zh3hZ',
+    [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false
+    ]
+);
     $database->exec("CREATE TABLE IF NOT EXISTS contact_messages (
         id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
         full_name VARCHAR(120) NOT NULL,
@@ -111,8 +110,11 @@ $siteConfig = [
     'tagline' => 'Professional auto detailing focused on quality, convenience, and attention to detail.',
     'phone' => '520-710-7339',
     'phone_href' => 'tel:+15207107339',
+    'sms_href' => 'sms:+15207107339?body=Hi%20Click%20Slick%20Auto%20Detailing!%20I%27d%20like%20to%20book%20a%20detailing%20service.%20Can%20you%20please%20provide%20your%20available%20schedule%3F',
     'email' => 'hello@clickslickdetail.com',
     'location' => 'Tucson, AZ, United States',
+    'map_embed_url' => 'https://www.google.com/maps?q=32.250942,-110.9987685&z=15&output=embed',
+    'directions_url' => 'https://www.google.com/maps/dir/?api=1&destination=32.250942%2C-110.9987685',
     'service_area' => 'Mobile detailing available throughout Tucson, AZ',
     'business_hours' => 'Mon - Sat: 8:00 AM - 6:00 PM',
     'facebook' => 'facebook.com/clickslickautodetailing',
@@ -120,7 +122,7 @@ $siteConfig = [
     'instagram' => '@clickslickdetail',
     'address' => 'Mobile service available by appointment',
     'meta_title' => 'Click Slick Auto Detailing | Professional Auto Detailing',
-    'meta_description' => 'Professional auto detailing focused on exceptional attention to detail, quality results, and convenient service. Book your next detail with Click Slick Auto Detailing.'
+    'meta_description' => 'Professional auto detailing focused on exceptional attention to detail, quality results, and convenient service. Call or text Click Slick Auto Detailing to schedule.'
 ];
 
 $serviceOptions = [
@@ -231,7 +233,7 @@ $faqs = [
     ],
     [
         'question' => 'Can you remove stains or pet hair?',
-        'answer' => 'Some results depend on the material, age of the stain, and how deeply it is set in. We can assess what is realistic during the booking process.'
+        'answer' => 'Some results depend on the material, age of the stain, and how deeply it is set in. Call or text us so we can discuss what is realistic for your vehicle.'
     ],
     [
         'question' => 'Do you offer recurring detailing?',
@@ -239,7 +241,7 @@ $faqs = [
     ],
     [
         'question' => 'How do I book?',
-        'answer' => 'You can request an appointment using the booking form on this site, and we will follow up to confirm the details.'
+        'answer' => 'Call or text us directly and we will help you choose a service and find an available time.'
     ]
 ];
 ?>

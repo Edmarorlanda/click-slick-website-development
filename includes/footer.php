@@ -18,8 +18,9 @@
                     </div>
                     <div class="footer-links">
                         <a href="./reviews.php">Reviews</a>
-                        <a href="./booking.php">Booking</a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>">Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
                         <a href="./contact.php">Contact</a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['directions_url']); ?>" target="_blank" rel="noopener noreferrer">Get Directions</a>
                         <a href="./index.php#faq">FAQ</a>
                     </div>
                     <div class="footer-contact">

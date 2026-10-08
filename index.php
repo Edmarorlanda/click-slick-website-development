@@ -1,6 +1,6 @@
 <?php
 $pageTitle = 'Click Slick Auto Detailing | Professional Auto Detailing';
-$pageDescription = 'Professional auto detailing focused on exceptional attention to detail, quality results, and convenient service. Book your next detail with Click Slick Auto Detailing.';
+$pageDescription = 'Professional auto detailing focused on exceptional attention to detail, quality results, and convenient service. Call or text Click Slick Auto Detailing to schedule.';
 include __DIR__ . '/includes/header.php';
 $homepageTestimonials = $testimonials;
 try {
@@ -15,12 +15,15 @@ try {
 
 <main id="top">
     <section class="hero">
+        <canvas class="hero-particles" aria-hidden="true"></canvas>
+        <span class="hero-light-sweep" aria-hidden="true"></span>
         <div class="container hero-content reveal">
             <div class="badge-pill"><i class="fa-solid fa-shield-check"></i> Professional • Detailed • Convenient</div>
             <h1>Your Car Deserves to Look This Good.</h1>
             <p>Professional auto detailing with meticulous attention to detail — delivered with quality, convenience, and care.</p>
             <div class="hero-actions">
-                <a href="./booking.php" class="btn btn-primary">Book Your Detail</a>
+                <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-primary"><i class="fa-solid fa-phone" aria-hidden="true"></i> Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
+                <a href="<?php echo htmlspecialchars($siteConfig['sms_href']); ?>" class="btn btn-outline-light"><i class="fa-solid fa-comment-sms" aria-hidden="true"></i> Text Us</a>
                 <a href="#services" class="btn btn-outline-light">Explore Our Services</a>
             </div>
             <div class="hero-trust"><span></span> Trusted by drivers who care about the finish</div>
@@ -80,7 +83,7 @@ try {
                     <p>Tell us what your vehicle needs and we'll help you choose the right detailing service.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
-                    <a href="./booking.php" class="btn btn-primary">Get a Quote</a>
+                    <a href="./contact.php#contact-options" class="btn btn-primary">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -95,8 +98,8 @@ try {
             <div class="row g-5 align-items-center mt-2">
                 <div class="col-lg-7 reveal">
                     <div class="before-after-wrap before-after-slider">
-                        <img class="before-image" src="./assets/images/sample-pic.png" alt="Before car detailing transformation" loading="lazy">
-                        <img class="after-image" src="./assets/images/sample-pic.png" alt="After car detailing transformation" loading="lazy">
+                        <img class="before-image" src="./assets/images/before.png" alt="Blue car hood before detailing, showing swirl marks and dull paint" loading="lazy">
+                        <img class="after-image" src="./assets/images/after.png" alt="Blue car hood after detailing with a glossy, polished finish" loading="lazy">
                         <div class="slider-divider"></div>
                         <div class="slider-handle"><i class="fa-solid fa-arrows-left-right"></i></div>
                     </div>
@@ -121,7 +124,7 @@ try {
             <div class="row g-4 mt-2">
                 <?php
                 $processSteps = [
-                    ['01', 'Book', 'Choose your service and preferred appointment time.'],
+                    ['01', 'Get in Touch', 'Call or text us to discuss your service and find a time that works for you.'],
                     ['02', 'We Arrive', 'For mobile appointments, we come directly to you.'],
                     ['03', 'We Detail', 'Your vehicle receives careful, professional attention from interior to exterior.'],
                     ['04', 'Enjoy the Results', 'Get your vehicle back looking refreshed, clean, and ready to impress.']
@@ -256,148 +259,32 @@ try {
         </div>
     </section>
 
-    <section class="section" id="booking">
+    <section class="section location-section" id="location">
         <div class="container">
             <div class="text-center reveal">
-                <h2 class="section-title">Book Your Detail</h2>
-                <p class="section-subtitle mx-auto">Tell us about your vehicle and what it needs. We'll take care of the rest.</p>
+                <span class="eyebrow">Location</span>
+                <h2 class="section-title">Click Slick Auto Detailing</h2>
+                <p class="section-subtitle mx-auto">Visit us in Tucson, Arizona, or ask about convenient mobile detailing by appointment.</p>
             </div>
-            <div class="booking-form-shell multi-step-form reveal">
-                <div class="booking-header">
-                    <h3>Your Detail Request</h3>
-                    <div class="progress-indicator">
-                        <span class="active"></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+            <div class="location-card reveal">
+                <div class="location-panel">
+                    <h3><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Our Location</h3>
+                    <p class="location-intro"><?php echo htmlspecialchars($siteConfig['location']); ?>. Mobile service is available throughout Tucson by appointment.</p>
+                    <ul class="contact-list location-details">
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i><div><strong>Call to Book</strong><a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>"><?php echo htmlspecialchars($siteConfig['phone']); ?></a></div></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><div><strong>Business Hours</strong><span><?php echo htmlspecialchars($siteConfig['business_hours']); ?></span></div></li>
+                    </ul>
+                    <div class="location-actions">
+                        <a href="<?php echo htmlspecialchars($siteConfig['directions_url']); ?>" class="btn btn-primary" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i> Get Directions</a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-outline-primary"><i class="fa-solid fa-phone" aria-hidden="true"></i> Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
                     </div>
                 </div>
-                <div class="booking-body">
-                    <form method="post" action="./booking.php">
-                        <input type="hidden" name="csrf_token" value="<?php echo e(csrf_token()); ?>">
-                        <div class="form-step active">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="vehicle-make">Vehicle Make</label>
-                                    <input id="vehicle-make" name="vehicle_make" type="text" class="form-control" placeholder="Toyota" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vehicle-model">Vehicle Model</label>
-                                    <input id="vehicle-model" name="vehicle_model" type="text" class="form-control" placeholder="Camry" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vehicle-year">Vehicle Year</label>
-                                    <input id="vehicle-year" name="vehicle_year" type="number" min="1900" max="2100" class="form-control" placeholder="2022" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vehicle-type">Vehicle Type</label>
-                                    <select id="vehicle-type" name="vehicle_type" class="form-select" required>
-                                        <option value="">Select one</option>
-                                        <option>Car</option>
-                                        <option>SUV</option>
-                                        <option>Truck</option>
-                                        <option>Luxury Vehicle</option>
-                                        <option>Sports Car</option>
-                                    </select>
-                                </div>
-                                <div class="form-group full">
-                                    <label for="vehicle-color">Vehicle Color</label>
-                                    <input id="vehicle-color" name="vehicle_color" type="text" class="form-control" placeholder="Blue, black, silver..." required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step">
-                            <div class="form-grid">
-                                <div class="form-group full">
-                                    <label for="service-type">Service</label>
-                                    <select id="service-type" name="service_type" class="form-select" required>
-                                        <option value="">Choose a service</option>
-                                        <?php foreach ($serviceOptions as $option): ?>
-                                            <option><?php echo htmlspecialchars($option); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="form-group full">
-                                    <label for="service-notes">Additional Details</label>
-                                    <textarea id="service-notes" name="notes" rows="4" placeholder="Pet hair, stains, heavy dirt, scratches, etc."></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="preferred-date">Preferred Date</label>
-                                    <input id="preferred-date" name="preferred_date" type="date" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="preferred-time">Preferred Time</label>
-                                    <input id="preferred-time" name="preferred_time" type="time" class="form-control" required>
-                                </div>
-                                <div class="form-group full">
-                                    <label for="service-location">Service Location</label>
-                                    <select id="service-location" name="service_location" class="form-select" required>
-                                        <option value="">Choose location type</option>
-                                        <option>In-Shop</option>
-                                        <option>Mobile Service</option>
-                                    </select>
-                                </div>
-                                <div class="form-group full" id="service-address-wrap" style="display:none;">
-                                    <label for="service-address">Service Address</label>
-                                    <input id="service-address" name="service_address" type="text" class="form-control" placeholder="Street address for mobile detailing">
-                                </div>
-                                <div class="form-group full">
-                                    <label class="checkbox-row">
-                                        <input type="checkbox" id="mobile-service" name="mobile_service">
-                                        <span>Mobile Service</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="full-name">Full Name</label>
-                                    <input id="full-name" name="full_name" type="text" class="form-control" placeholder="Your full name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone-number">Phone Number</label>
-                                    <input id="phone-number" name="phone" type="tel" class="form-control" placeholder="520-710-7339" required>
-                                </div>
-                                <div class="form-group full">
-                                    <label for="email-address">Email</label>
-                                    <input id="email-address" name="email" type="email" class="form-control" placeholder="you@example.com" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step">
-                            <div class="confirmation-box" style="display:none;">
-                                <h4>Your booking request has been received.</h4>
-                                <p>We'll contact you to confirm your appointment.</p>
-                            </div>
-                            <div class="form-grid mt-4">
-                                <div class="form-group full">
-                                    <label>Review your information before submitting.</label>
-                                    <p class="step-note">Once you submit, we will follow up to confirm your preferred date and service details.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-outline-light" data-action="prev" style="background:#edf2ff;border:1px solid rgba(29,78,216,0.12);color:var(--dark-blue);">Previous</button>
-                            <button type="button" class="btn btn-primary" data-action="next">Next</button>
-                            <button type="submit" class="btn btn-primary" data-action="submit" style="display:none;">Request Appointment</button>
-                        </div>
-                    </form>
+                <div class="location-map">
+                    <iframe title="Map showing Click Slick Auto Detailing in Tucson, Arizona" src="<?php echo htmlspecialchars($siteConfig['map_embed_url']); ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
     </section>
-
     <section class="section" id="faq">
         <div class="container">
             <div class="text-center reveal">
@@ -475,9 +362,9 @@ try {
                 </div>
                 <div class="col-lg-5 reveal d-flex align-items-stretch">
                     <div class="contact-card w-100 d-flex flex-column justify-content-center">
-                        <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-primary mb-3"><i class="fa-solid fa-phone"></i> Call Now</a>
-                        <a href="mailto:<?php echo htmlspecialchars($siteConfig['email']); ?>" class="btn btn-primary mb-3"><i class="fa-solid fa-envelope"></i> Send a Message</a>
-                        <a href="./booking.php" class="btn btn-primary"><i class="fa-solid fa-calendar-check"></i> Book a Detail</a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-primary mb-3"><i class="fa-solid fa-phone" aria-hidden="true"></i> Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['sms_href']); ?>" class="btn btn-outline-primary mb-3"><i class="fa-solid fa-comment-sms" aria-hidden="true"></i> Text Us</a>
+                        <a href="mailto:<?php echo htmlspecialchars($siteConfig['email']); ?>" class="btn btn-outline-primary"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Send an Email</a>
                     </div>
                 </div>
             </div>
@@ -487,9 +374,16 @@ try {
     <section class="cta-band">
         <div class="container reveal">
             <div class="row align-items-center g-4">
-                <div class="col-lg-8">
-                    <h3>Your Next Detail Starts Here.</h3>
-                    <p>Professional care. Attention to detail. Convenient service.</p>
+                <div class="col-lg-7">
+                    <h3>LET'S GET YOUR CAR LOOKING ITS BEST</h3>
+                    <p>Ready to book your next detailing service? Give us a call or send us a text.</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="cta-actions">
+                        <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-primary"><i class="fa-solid fa-phone" aria-hidden="true"></i> Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['sms_href']); ?>" class="btn btn-outline-light"><i class="fa-solid fa-comment-sms" aria-hidden="true"></i> Text Us</a>
+                        <a href="<?php echo htmlspecialchars($siteConfig['directions_url']); ?>" class="btn btn-outline-light" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Get Directions</a>
+                    </div>
                 </div>
             </div>
         </div>

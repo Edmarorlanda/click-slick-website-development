@@ -23,7 +23,7 @@ include __DIR__ . '/includes/header.php';
                         </ul>
                         <div class="service-meta">
                             <span class="service-price"><?php echo htmlspecialchars($card['price']); ?></span>
-                            <a href="./booking.php" class="link-arrow">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="link-arrow">Call <?php echo htmlspecialchars($siteConfig['phone']); ?> <i class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>

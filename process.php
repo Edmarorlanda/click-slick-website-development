@@ -11,7 +11,7 @@ include __DIR__ . '/includes/header.php';
         <div class="row g-4 mt-2">
             <?php
             $processSteps = [
-                ['01', 'Book', 'Choose your service and preferred appointment time.'],
+                ['01', 'Get in Touch', 'Call or text us to discuss your service and find a time that works for you.'],
                 ['02', 'We Arrive', 'For mobile appointments, we come directly to you.'],
                 ['03', 'We Detail', 'Your vehicle receives careful, professional attention from interior to exterior.'],
                 ['04', 'Enjoy the Results', 'Get your vehicle back looking refreshed, clean, and ready to impress.']

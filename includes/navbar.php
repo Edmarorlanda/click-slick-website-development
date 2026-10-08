@@ -1,5 +1,5 @@
 <header class="site-header">
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-xxl fixed-top">
         <div class="container navbar-inner">
             <a class="navbar-brand" href="./index.php" aria-label="Click Slick Auto Detailing home">
                 <img src="./assets/images/click.jpg" alt="Click Slick Auto Detailing logo" class="brand-logo" loading="lazy">
@@ -9,7 +9,7 @@
                 </div>
             </a>
 
-            <button class="navbar-toggler" type="button" aria-label="Toggle navigation" aria-expanded="false">
+            <button class="navbar-toggler" type="button" aria-label="Toggle navigation" aria-controls="navbarNav" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -26,6 +26,7 @@
                         ['About', 'about.php', 'about'],
                         ['Reviews', 'reviews.php', 'reviews'],
                         ['FAQ', 'index.php#faq', 'faq'],
+                        ['Location', 'index.php#location', 'location'],
                         ['Contact', 'contact.php', 'contact']
                     ];
                     foreach ($navItems as $item) {
@@ -37,7 +38,7 @@
                     }
                     ?>
                 </ul>
-                <a href="./booking.php" class="btn btn-primary btn-book"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>Book Your Detail</span></a>
+                <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-primary btn-book"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>Call <?php echo htmlspecialchars($siteConfig['phone']); ?></span></a>
             </div>
         </div>
     </nav>

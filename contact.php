@@ -1,90 +1,53 @@
 <?php
 $pageTitle = 'Contact | Click Slick Auto Detailing';
-$pageDescription = 'Contact Click Slick Auto Detailing to schedule your next detailing service.';
-$contactMessage = null;
-$contactError = null;
+$pageDescription = 'Call or text Click Slick Auto Detailing to schedule your next detailing service.';
 require_once __DIR__ . '/includes/database.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim((string) ($_POST['contact_name'] ?? ''));
-    $email = trim((string) ($_POST['contact_email'] ?? ''));
-    $phone = trim((string) ($_POST['contact_phone'] ?? ''));
-    $message = trim((string) ($_POST['contact_message'] ?? ''));
-
-    if (!verify_csrf()) {
-        $contactError = 'Your session expired. Please refresh the page and try again.';
-    } elseif ($name === '' || $message === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $contactError = 'Please provide your name, a valid email, and a message.';
-    } else {
-        try {
-            $statement = db()->prepare('INSERT INTO contact_messages (full_name, email, phone, message) VALUES (?, ?, ?, ?)');
-            $statement->execute([$name, $email, $phone ?: null, $message]);
-            $contactMessage = 'Thanks for reaching out. We will get back to you soon.';
-            $_POST = [];
-        } catch (Throwable $exception) {
-            $contactError = 'We could not save your message right now. Please try again.';
-        }
-    }
-}
 include __DIR__ . '/includes/header.php';
 ?>
 <main class="section inner-page">
     <div class="container">
-        <?php if ($contactMessage): ?><div class="alert alert-success" role="status"><?php echo e($contactMessage); ?></div><?php endif; ?>
-        <?php if ($contactError): ?><div class="alert alert-danger" role="alert"><?php echo e($contactError); ?></div><?php endif; ?>
-        <div class="text-center reveal">
-            <h1 class="section-title">Contact Click Slick</h1>
-            <p class="section-subtitle mx-auto">We’re here to help you schedule a detail that fits your vehicle and your schedule.</p>
+        <div class="text-center reveal" id="contact-options">
+            <span class="eyebrow">Contact / Book Through Contact</span>
+            <h1 class="section-title">Ready to Get Your Car Looking Its Best?</h1>
+            <p class="section-subtitle mx-auto">Ready to book? Call or text us and we'll help you schedule your detailing service.</p>
+            <div class="contact-actions">
+                <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-primary"><i class="fa-solid fa-phone" aria-hidden="true"></i> Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
+                <a href="<?php echo htmlspecialchars($siteConfig['sms_href']); ?>" class="btn btn-secondary"><i class="fa-solid fa-comment-sms" aria-hidden="true"></i> Text Us</a>
+            </div>
+            <p class="contact-phone">Call us at <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>"><?php echo htmlspecialchars($siteConfig['phone']); ?></a></p>
+            <p class="contact-hours">Business hours: <?php echo htmlspecialchars($siteConfig['business_hours']); ?></p>
         </div>
-        <div class="row g-4 mt-2 align-items-stretch">
-            <div class="col-lg-7 reveal">
+        <div class="row g-4 mt-2">
+            <div class="col-lg-8 mx-auto reveal">
                 <div class="contact-card">
                     <ul class="contact-list">
-                        <li>
-                            <i class="fa-solid fa-phone"></i>
-                            <div>
-                                <strong>Phone</strong>
-                                <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>"><?php echo htmlspecialchars($siteConfig['phone']); ?></a>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-envelope"></i>
-                            <div>
-                                <strong>Email</strong>
-                                <a href="mailto:<?php echo htmlspecialchars($siteConfig['email']); ?>"><?php echo htmlspecialchars($siteConfig['email']); ?></a>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-location-dot"></i>
-                            <div>
-                                <strong>Service Area</strong>
-                                <span><?php echo htmlspecialchars($siteConfig['location']); ?></span>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-clock"></i>
-                            <div>
-                                <strong>Business Hours</strong>
-                                <span><?php echo htmlspecialchars($siteConfig['business_hours']); ?></span>
-                            </div>
-                        </li>
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i><div><strong>Phone</strong><a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>"><?php echo htmlspecialchars($siteConfig['phone']); ?></a></div></li>
+                        <li><i class="fa-solid fa-envelope" aria-hidden="true"></i><div><strong>Email</strong><a href="mailto:<?php echo htmlspecialchars($siteConfig['email']); ?>"><?php echo htmlspecialchars($siteConfig['email']); ?></a></div></li>
+                        <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><div><strong>Service Area</strong><span><?php echo htmlspecialchars($siteConfig['location']); ?></span></div></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><div><strong>Business Hours</strong><span><?php echo htmlspecialchars($siteConfig['business_hours']); ?></span></div></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-5 reveal">
-                <div class="contact-card w-100">
-                    <h3>Send a Message</h3>
-                    <form method="post" action="./contact.php" class="mt-3">
-                        <input type="hidden" name="csrf_token" value="<?php echo e(csrf_token()); ?>">
-                        <div class="form-group mb-3"><label for="contact-name">Name</label><input id="contact-name" name="contact_name" class="form-control" required value="<?php echo e($_POST['contact_name'] ?? ''); ?>"></div>
-                        <div class="form-group mb-3"><label for="contact-email">Email</label><input id="contact-email" name="contact_email" type="email" class="form-control" required value="<?php echo e($_POST['contact_email'] ?? ''); ?>"></div>
-                        <div class="form-group mb-3"><label for="contact-phone">Phone <span class="optional-label">(optional)</span></label><input id="contact-phone" name="contact_phone" class="form-control" value="<?php echo e($_POST['contact_phone'] ?? ''); ?>"></div>
-                        <div class="form-group mb-3"><label for="contact-message">Message</label><textarea id="contact-message" name="contact_message" rows="4" class="form-control" required><?php echo e($_POST['contact_message'] ?? ''); ?></textarea></div>
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
-                    </form>
+        </div>
+
+        <section class="location-section contact-location" id="location">
+            <div class="location-panel">
+                <span class="eyebrow">Location</span>
+                <h2>Click Slick Auto Detailing</h2>
+                <p class="location-intro">Find us in Tucson, Arizona. Mobile detailing is also available throughout the area by appointment.</p>
+                <ul class="contact-list location-details">
+                    <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><div><strong>Our Location</strong><span><?php echo htmlspecialchars($siteConfig['location']); ?></span></div></li>
+                    <li><i class="fa-solid fa-clock" aria-hidden="true"></i><div><strong>Business Hours</strong><span><?php echo htmlspecialchars($siteConfig['business_hours']); ?></span></div></li>
+                </ul>
+                <div class="location-actions">
+                    <a href="<?php echo htmlspecialchars($siteConfig['directions_url']); ?>" class="btn btn-primary" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i> Get Directions</a>
+                    <a href="<?php echo htmlspecialchars($siteConfig['phone_href']); ?>" class="btn btn-outline-primary"><i class="fa-solid fa-phone" aria-hidden="true"></i> Call <?php echo htmlspecialchars($siteConfig['phone']); ?></a>
                 </div>
             </div>
-        </div>
+            <div class="location-map">
+                <iframe title="Map showing Click Slick Auto Detailing in Tucson, Arizona" src="<?php echo htmlspecialchars($siteConfig['map_embed_url']); ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            </div>
+        </section>
     </div>
 </main>
 <?php include __DIR__ . '/includes/footer.php'; ?>
